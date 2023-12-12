@@ -1,4 +1,4 @@
-﻿namespace MicroLang.Lexer.Tok;
+﻿namespace MicroLang.Compiler.Lexer.Tok;
 
 internal enum TokenKind
 {
@@ -6,8 +6,9 @@ internal enum TokenKind
     Spaces,
     Eoln,
     Comment,
+    ReservedWord,
     Identifier,
     Operator,
     Number,
-    String
+    String,
 }

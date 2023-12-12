@@ -1,8 +1,8 @@
 ﻿using MicroLang.Utils;
 
-namespace MicroLang.Lexer.Rules;
+namespace MicroLang.Compiler.Lexer.Rules;
 
-public static class CharUtilities
+internal static class CharUtilities
 {
     internal static int MatchFunc(StructSpan<char> text, Predicate<char> matchFirst, Predicate<char> matchOthers)
     {

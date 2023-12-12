@@ -1,7 +1,5 @@
-﻿// See https://aka.ms/new-console-template for more information
+﻿using MicroLang;
+using MicroLang.Compiler;
 
-using MicroLang;
-
-Console.WriteLine("Hello, World!");
 var compiler = new SlCompiler();
-compiler.ParseFile("Examples/file01.sl");
+compiler.ParseFile(@"D:\Oss\MicroLang\MicroLang\Examples\Libs\System\Res.sl");

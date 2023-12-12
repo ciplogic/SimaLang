@@ -1,5 +1,5 @@
 ﻿using MicroLang.Utils;
 
-namespace MicroLang.Lexer.Tok;
+namespace MicroLang.Compiler.Lexer.Tok;
 
 internal record struct TokenRule(Func<StructSpan<char>, int> matcher, TokenKind Kind);

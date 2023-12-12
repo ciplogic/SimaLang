@@ -1,9 +1,9 @@
 ﻿using MicroLang.Utils;
-using static MicroLang.Lexer.Rules.CharUtilities;
+using static MicroLang.Compiler.Lexer.Rules.CharUtilities;
 
-namespace MicroLang.Lexer.Rules;
+namespace MicroLang.Compiler.Lexer.Rules;
 
-public static class LexerRules
+internal static class LexerRules
 {
     internal static int MatchSpacesLen(StructSpan<char> text) 
         => MatchFunc(text, IsSpace);
@@ -53,6 +53,7 @@ public static class LexerRules
 
     private static string[] Operators = { 
         "...",".", 
+        "=>",
         "<", ">", 
         "=",
         "(", ")", "[", "]", "{", "}", 
@@ -63,4 +64,43 @@ public static class LexerRules
 
     internal static int MatchOperatorLen(StructSpan<char> text) 
         => MatchStartAny(text, Operators);
+    
+    private static readonly string[] ReservedWords = { 
+        "enum",
+        "elif",
+        "else",
+        "enum",
+        "fn",
+        "for",
+        "if",
+        "import",
+        "interface",
+        "return",
+        "value",
+        "yield"
+    };
+
+    internal static int MatchReservedWordLen(StructSpan<char> text)
+    {
+        int identifierLen = MatchIdentifierLen(text);
+        if (identifierLen == 0)
+        {
+            return 0;
+        }
+
+        foreach (string reservedWord in ReservedWords)
+        {
+            if (identifierLen != reservedWord.Length)
+            {
+                continue;
+            }
+
+            if (text.StartsWith(reservedWord))
+            {
+                return identifierLen;
+            }
+        }
+
+        return 0;
+    }
 }

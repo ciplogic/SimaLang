@@ -1,7 +1,9 @@
 ﻿namespace MicroLang.Utils;
 
-public static class ResUtils
+internal static class ResUtils
 {
-    public static Res<T> Ok<T>(this T val) => new Res<T>(val, string.Empty);
-    public static Res<T> Fail<T>(string err) => new Res<T>(default, err);
+    internal static Res<T> Ok<T>(this T val) => new(val, string.Empty);
+    internal static Res<T> Fail<T>(string err) => new(default, err);
+    
+    internal static bool IsOk<T>(this Res<T> res) => string.IsNullOrEmpty(res.ErrorMessage);
 }

@@ -1,31 +1,32 @@
-﻿using MicroLang.Lexer.Rules;
-using MicroLang.Lexer.Tok;
+﻿using MicroLang.Compiler.Lexer.Rules;
+using MicroLang.Compiler.Lexer.Tok;
 using MicroLang.Utils;
 using static MicroLang.Utils.ResUtils;
-namespace MicroLang.Lexer;
+namespace MicroLang.Compiler.Lexer;
 
 class Lexer
 {
     private List<TokenRule> _tokenRules = BuildDefaults();
+    internal bool SkipSpaces = true;
 
     private static List<TokenRule> BuildDefaults()
     {
         List<TokenRule> results =
         [
-            new (LexerRules.MatchSpacesLen, TokenKind.Spaces),
-            new (LexerRules.MatchEolnLen, TokenKind.Eoln),
-            new (LexerRules.MatchCommentLen, TokenKind.Comment),
-            new (LexerRules.MatchNumberLen, TokenKind.Number),
-            new (LexerRules.MatchStringLen, TokenKind.String),
-            new (LexerRules.MatchOperatorLen, TokenKind.Operator),
-            new (LexerRules.MatchIdentifierLen, TokenKind.Identifier),
+            new(LexerRules.MatchSpacesLen, TokenKind.Spaces),
+            new(LexerRules.MatchEolnLen, TokenKind.Eoln),
+            new(LexerRules.MatchCommentLen, TokenKind.Comment),
+            new(LexerRules.MatchNumberLen, TokenKind.Number),
+            new(LexerRules.MatchStringLen, TokenKind.String),
+            new(LexerRules.MatchOperatorLen, TokenKind.Operator),
+            new(LexerRules.MatchReservedWordLen, TokenKind.ReservedWord),
+            new(LexerRules.MatchIdentifierLen, TokenKind.Identifier),
         ];
         return results;
     }
 
     Token? MatchToken(StructSpan<char> span)
     {
-        bool found = false;
         foreach (TokenRule tokenRule in _tokenRules)
         {
             var matchLen = tokenRule.matcher(span);
@@ -41,11 +42,16 @@ class Lexer
         return default;
     }
 
-    public Res<List<Token>> Scan(string fileNameContent)
+    private static bool IsSpaceToken(TokenKind tokenKind)
     {
-        List<Token> result = new List<Token>();
+        return tokenKind == TokenKind.Spaces || tokenKind == TokenKind.Comment;
+    }
+
+    internal Res<List<Token>> Scan(string fileNameContent)
+    {
+        List<Token> result = new(fileNameContent.Length / 8);
         StructSpan<char> span = StructSpan<char>.Build(fileNameContent.ToCharArray());
-        while (span.Len!=0)
+        while (span.Len != 0)
         {
             Token? token = MatchToken(span);
             if (!token.HasValue)
@@ -53,7 +59,11 @@ class Lexer
                 string notFoundText = span.AsText(span.Len);
                 return Fail<List<Token>>($"Cannot find token for: {notFoundText}");
             }
-            result.Add(token.Value);
+
+            if (!SkipSpaces  || !IsSpaceToken(token.Value.Kind))
+            {
+                result.Add(token.Value);
+            }
             span = span.SubSpan(token.Value.Text.Length);
         }
 
