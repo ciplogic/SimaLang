@@ -25,17 +25,17 @@ class Lexer
         return results;
     }
 
-    Token? MatchToken(StructSpan<char> span)
+    Token? MatchToken(Slice<char> span)
     {
         foreach (TokenRule tokenRule in _tokenRules)
         {
-            var matchLen = tokenRule.matcher(span);
+            int matchLen = tokenRule.matcher(span);
             if (matchLen == 0)
             {
                 continue;
             }
 
-            Token token = new Token(span.AsText(matchLen), tokenRule.Kind);
+            Token token = new Token(tokenRule.Kind, span.AsText(matchLen));
             return token;
         }
 
@@ -50,7 +50,7 @@ class Lexer
     internal Res<List<Token>> Scan(string fileNameContent)
     {
         List<Token> result = new(fileNameContent.Length / 8);
-        StructSpan<char> span = StructSpan<char>.Build(fileNameContent.ToCharArray());
+        Slice<char> span = Slice<char>.Build(fileNameContent.ToCharArray());
         while (span.Len != 0)
         {
             Token? token = MatchToken(span);
@@ -64,7 +64,7 @@ class Lexer
             {
                 result.Add(token.Value);
             }
-            span = span.SubSpan(token.Value.Text.Length);
+            span = span.SubSlice(token.Value.Text.Length);
         }
 
         return result.Ok();

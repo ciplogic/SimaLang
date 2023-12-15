@@ -2,4 +2,4 @@
 
 namespace MicroLang.Compiler.Lexer.Tok;
 
-internal record struct TokenRule(Func<StructSpan<char>, int> matcher, TokenKind Kind);
+internal record struct TokenRule(Func<Slice<char>, int> matcher, TokenKind Kind);

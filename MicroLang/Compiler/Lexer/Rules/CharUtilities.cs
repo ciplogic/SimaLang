@@ -4,14 +4,14 @@ namespace MicroLang.Compiler.Lexer.Rules;
 
 internal static class CharUtilities
 {
-    internal static int MatchFunc(StructSpan<char> text, Predicate<char> matchFirst, Predicate<char> matchOthers)
+    internal static int MatchFunc(Slice<char> text, Predicate<char> matchFirst, Predicate<char> matchOthers)
     {
         if (!matchFirst(text[0]))
         {
             return 0;
         }
 
-        for (var i = 1; i < text.Len; i++)
+        for (int i = 1; i < text.Len; i++)
         {
             if (!matchOthers(text[i]))
             {
@@ -21,12 +21,12 @@ internal static class CharUtilities
 
         return text.Len;
     }
-    internal static int MatchFunc(StructSpan<char> text, Predicate<char> matchAll) 
+    internal static int MatchFunc(Slice<char> text, Predicate<char> matchAll) 
         => MatchFunc(text, matchAll, matchAll);
 
-    internal static int MatchStartAny(StructSpan<char> text, string[] textsStartWith)
+    internal static int MatchStartAny(Slice<char> text, string[] textsStartWith)
     {
-        foreach (var startsWith in textsStartWith)
+        foreach (string startsWith in textsStartWith)
         {
             if (text[0] != startsWith[0])
             {
@@ -42,19 +42,19 @@ internal static class CharUtilities
         return 0;
     } 
 
-    internal static string AsText(this StructSpan<char> text, int len)
+    internal static string AsText(this Slice<char> text, int len)
     {
-        var subText = new string(text.Data, text.Start, len);
+        string subText = new string(text.Data, text.Start, len);
         return subText;
     }
-    internal static bool StartsWith(this StructSpan<char> text, string hay)
+    internal static bool StartsWith(this Slice<char> text, string hay)
     {
         if (hay.Length > text.Len)
         {
             return false;
         }
 
-        for (var i = 0; i < hay.Length; i++)
+        for (int i = 0; i < hay.Length; i++)
         {
             if (text[i] != hay[i])
             {

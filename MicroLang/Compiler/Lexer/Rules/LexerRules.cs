@@ -5,25 +5,25 @@ namespace MicroLang.Compiler.Lexer.Rules;
 
 internal static class LexerRules
 {
-    internal static int MatchSpacesLen(StructSpan<char> text) 
+    internal static int MatchSpacesLen(Slice<char> text) 
         => MatchFunc(text, IsSpace);
-    internal static int MatchIdentifierLen(StructSpan<char> text) 
+    internal static int MatchIdentifierLen(Slice<char> text) 
         => MatchFunc(text, IsAlpha, IsAlphaDigit);
-    internal static int MatchNumberLen(StructSpan<char> text)
+    internal static int MatchNumberLen(Slice<char> text)
         => MatchFunc(text, IsDigit);
 
-    internal static int MatchStringLen(StructSpan<char> text)
+    internal static int MatchStringLen(Slice<char> text)
     {
-        var firstChar = text[0];
+        char firstChar = text[0];
         if (!IsQuotingChar(firstChar))
         {
             return 0;
         }
-        var matchLen = MatchFunc(text, IsQuotingChar, ch => ch == firstChar);
+        int matchLen = MatchFunc(text, IsQuotingChar, ch => ch == firstChar);
         return matchLen + 1;
     }
     
-    internal static int MatchCommentLen(StructSpan<char> text)
+    internal static int MatchCommentLen(Slice<char> text)
     {
         if (!text.StartsWith("//"))
         {
@@ -41,7 +41,7 @@ internal static class LexerRules
         return text.Len;
     }
 
-    internal static int MatchEolnLen(StructSpan<char> text)
+    internal static int MatchEolnLen(Slice<char> text)
     {
         if (text.StartsWith("\r\n"))
         {
@@ -58,11 +58,12 @@ internal static class LexerRules
         "=",
         "(", ")", "[", "]", "{", "}", 
         ",",
-        "*","/","&",
+        "**","*","&",
+        "/","+","-",
         ";", ":" 
     };
 
-    internal static int MatchOperatorLen(StructSpan<char> text) 
+    internal static int MatchOperatorLen(Slice<char> text) 
         => MatchStartAny(text, Operators);
     
     private static readonly string[] ReservedWords = { 
@@ -70,6 +71,7 @@ internal static class LexerRules
         "elif",
         "else",
         "enum",
+        "arr",
         "fn",
         "for",
         "if",
@@ -80,7 +82,7 @@ internal static class LexerRules
         "yield"
     };
 
-    internal static int MatchReservedWordLen(StructSpan<char> text)
+    internal static int MatchReservedWordLen(Slice<char> text)
     {
         int identifierLen = MatchIdentifierLen(text);
         if (identifierLen == 0)

@@ -6,6 +6,6 @@ class SemanticTree
 
     internal TreeNode GetLibrary(string libraryName)
     {
-        TreeNode targetLibrary = Root["Libs"][libraryName];
+        TreeNode targetLibrary = Root.Child("Libs").Child(libraryName);
         return targetLibrary; }
 }
