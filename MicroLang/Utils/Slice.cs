@@ -1,6 +1,6 @@
 ﻿namespace MicroLang.Utils;
 
-record struct Slice<T>(T[] Data, int Start, int Len)
+public record struct Slice<T>(T[] Data, int Start, int Len)
 {
     internal T this[int index] => Data[Start + index];
 

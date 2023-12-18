@@ -1,6 +1,6 @@
 ﻿namespace MicroLang.Compiler.Lexer.Tok;
 
-internal enum TokenKind
+public enum TokenKind
 {
     None,
     Spaces,

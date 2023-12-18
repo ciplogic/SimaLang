@@ -2,10 +2,10 @@
 
 class SemanticTree
 {
-    private TreeNode Root = new ("Program");
+    private TreeNode _root = new ("Program");
 
     internal TreeNode GetLibrary(string libraryName)
     {
-        TreeNode targetLibrary = Root.Child("Libs").Child(libraryName);
+        TreeNode targetLibrary = _root.Child("Libs").Child(libraryName);
         return targetLibrary; }
 }

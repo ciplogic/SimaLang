@@ -29,7 +29,7 @@ class Lexer
     {
         foreach (TokenRule tokenRule in _tokenRules)
         {
-            int matchLen = tokenRule.matcher(span);
+            int matchLen = tokenRule.Matcher(span);
             if (matchLen == 0)
             {
                 continue;

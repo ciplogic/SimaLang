@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "MicroLang": {
+      "commandName": "Project",
+      "workingDirectory": "D:\\Oss\\MicroLang\\MicroLang"
+    }
+  }
+}

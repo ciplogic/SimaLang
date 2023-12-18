@@ -11,36 +11,38 @@ public static class EnumEvaluator
         var ev = Eval(tokens);
         return ToTreeNode(ev.Fields, ev.Name);
     }
-    internal static TreeNode ToTreeNode(List<(string Key, long Value)> Fields, string name)
+
+    private static TreeNode ToTreeNode(List<(string Key, long Value)> fields, string name)
     {
-        TreeNode result = new TreeNode(name);
-        TreeNode fields = result.Child("fields");
-        foreach ((string Key, long Value) field in Fields)
+        TreeNode result = new TreeNode("enum");
+        result["name"] = name;
+        TreeNode fieldsNodes = result.Child("fields");
+        foreach ((string Key, long Value) field in fields)
         {
-            TreeNode fieldNode = fields.Child(field.Key);
+            TreeNode fieldNode = fieldsNodes.Child(field.Key);
             fieldNode["Value"] = field.Value.ToString();
         }
         
-
         return result;
     }
     internal static (string Name, List<(string Key, long Value)> Fields) Eval(Slice<Token> tokens)
     {
-        string enumName = tokens[1].Text;
-        List<(string Key, long Value)> Fields = new List<(string Key, long Value)>();
-        Slice<Token>[] enumBody = tokens
-            .SkipWhile(tok => tok.Text == "(")
-            .Skip(1)
+        Scanner scanner = new Scanner(tokens);
+        
+        string enumName = scanner.Advance("enum").Move().Text;
+        scanner.Advance("(");
+        
+        List<(string Key, long Value)> fields = new();
+        Slice<Token>[] enumBody = scanner
             .TakeWhile(tok => tok.Text != ")")
-            .SplitWhen(tok => tok.Text == ",")
-            ;
+            .SplitWhen(tok => tok.Text == ",");
         foreach (Slice<Token> slice in enumBody)
         {
-            long evalValueSlice = EvalFieldValueSlice(slice, Fields); 
-            Fields.Add((slice[0].Text, evalValueSlice));    
+            long evalValueSlice = EvalFieldValueSlice(slice, fields); 
+            fields.Add((slice[0].Text, evalValueSlice));    
         }
         
-        return (enumName, Fields);
+        return (enumName, fields);
     }
 
     private static long EvalFieldValueSlice(Slice<Token> slice, List<(string Key, long Value)> enumFields)

@@ -7,18 +7,19 @@ namespace MicroLang.Compiler;
 
 internal class SlCompiler
 {
-    private string LibsPath = "";
+    private string _libsPath = "";
 
     internal SemanticTree Program { get; } = new();
     internal TreeNode ParseFile(string fileName)
     {
-        Lexer.Lexer lexer = new Lexer.Lexer();
         string fileNameContent = File.ReadAllText(fileName);
+        Lexer.Lexer lexer = new Lexer.Lexer();
         Res<List<Token>> tokensRes = lexer.Scan(fileNameContent);
         Token[] tokenArray = tokensRes.Value.ToArray();
         HighLevelParse highLevelParse = new HighLevelParse();
         TreeNode rootNode = highLevelParse.ParseFileHighLevel(tokenArray);
-        
+        Console.WriteLine("Parse result:");
+        Console.WriteLine(rootNode);
 
         return default;
     }

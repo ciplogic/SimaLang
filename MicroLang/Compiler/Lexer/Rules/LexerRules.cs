@@ -51,7 +51,7 @@ internal static class LexerRules
         return MatchFunc(text, IsEoln);
     }
 
-    private static string[] Operators = { 
+    private static string[] _operators = { 
         "...",".", 
         "=>",
         "<", ">", 
@@ -64,7 +64,7 @@ internal static class LexerRules
     };
 
     internal static int MatchOperatorLen(Slice<char> text) 
-        => MatchStartAny(text, Operators);
+        => MatchStartAny(text, _operators);
     
     private static readonly string[] ReservedWords = { 
         "enum",

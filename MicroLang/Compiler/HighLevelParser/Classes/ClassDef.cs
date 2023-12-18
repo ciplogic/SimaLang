@@ -1,8 +1,7 @@
-﻿namespace MicroLang.Compiler.HighLevelParser;
+﻿namespace MicroLang.Compiler.HighLevelParser.Classes;
 
 public record ClassDef(
     string Name,
-    int TypeId,
     bool IsByRef,
     string[] GenericArgs,
     PropertyDef[] Properties

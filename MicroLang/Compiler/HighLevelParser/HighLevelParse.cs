@@ -1,5 +1,6 @@
 ﻿using System.Diagnostics;
 using MicroLang.Compiler.Constants;
+using MicroLang.Compiler.HighLevelParser.Classes;
 using MicroLang.Compiler.Lexer.Tok;
 using MicroLang.Compiler.Semantic;
 using MicroLang.Utils;
@@ -29,7 +30,7 @@ internal class HighLevelParse
             }
             
         }
-        return default;
+        return result;
     }
 
     private Slice<Token> HandleReservedWord(Slice<Token> tokens, TreeNode body)
@@ -59,7 +60,11 @@ internal class HighLevelParse
         switch (oneLineDeclaration[0].Text)
         {
             case "value":
-                
+            {
+                var scanner = new Scanner(oneLineDeclaration);
+                var treeNode = ValueEvaluator.EvalAsTreeNode(scanner);
+                body.Children.Add(treeNode);
+            }
                 break;
             case "enum":
                 body.Children.Add(EnumEvaluator.EvalAsTreeNode(oneLineDeclaration));

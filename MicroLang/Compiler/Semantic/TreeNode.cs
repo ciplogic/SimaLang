@@ -1,26 +1,27 @@
-﻿using System.Text;
+﻿using System.Text.Json;
 
 namespace MicroLang.Compiler.Semantic;
 
-record TreeNode(List<TreeNode> Children, Dictionary<string, string> Props)
+public record TreeNode(Dictionary<string, string> Fields, List<TreeNode> Children)
 {
     internal TreeNode()
-        : this(new List<TreeNode>(), new Dictionary<string, string>())
+        : this(new Dictionary<string, string>(), new List<TreeNode>())
     {
     }
+
     internal TreeNode(string name)
         : this()
     {
         this["type"] = name;
     }
 
-    public string Type
+    private string Type
         => this["type"];
 
     private string GetField(string fieldKey)
     {
-        return Props.TryGetValue(fieldKey, out string result) 
-            ? result 
+        return Fields.TryGetValue(fieldKey, out string result)
+            ? result
             : string.Empty;
     }
 
@@ -31,6 +32,7 @@ record TreeNode(List<TreeNode> Children, Dictionary<string, string> Props)
         {
             return childMatch;
         }
+
         TreeNode result = new TreeNode(childType);
         Children.Add(result);
         return result;
@@ -39,40 +41,36 @@ record TreeNode(List<TreeNode> Children, Dictionary<string, string> Props)
     public string this[string key]
     {
         get => GetField(key);
-        set => Props[key] = value;
+        set => Fields[key] = value;
     }
 
     public override string ToString()
     {
-        return ToStringIndented(0);
+        var objToSerialize = ToPrintableDict();
+        return JsonSerializer.Serialize(objToSerialize, new JsonSerializerOptions()
+        {
+            WriteIndented = true
+        });
     }
 
-    string ToStringIndented(int indent)
+    Dictionary<string, object> ToPrintableDict()
     {
-        string spaces = new string(' ', indent);
-        StringBuilder sb = new StringBuilder();
-        sb.AppendLine("{");
-        foreach (KeyValuePair<string, string> kv in Props)
+        Dictionary<string, object> result = new Dictionary<string, object>();
+        foreach (var field in Fields)
         {
-            sb
-                .Append(spaces)
-                .Append("  ")
-                .Append($"{kv.Key}: {kv.Value},")
-                .AppendLine();
+            result[field.Key] = field.Value;
         }
 
-        foreach (TreeNode child in Children)
+        if (Children.Count == 0)
         {
-            string childText = child.ToStringIndented(indent + 2);
-            sb
-                .Append(spaces)
-                .Append("  ")
-                .Append(childText)
-                .AppendLine();
+            return result;
         }
-        sb.Append(spaces).AppendLine("}");
 
-        return sb.ToString();
+        Dictionary<string, object>[] items = Children.Select(
+            it => it.ToPrintableDict())
+            .ToArray();
+        result["children"] = items;
 
+        return result;
     }
 }
