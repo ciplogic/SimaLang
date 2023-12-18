@@ -1,11 +1,34 @@
 ﻿using MicroLang.Compiler.Semantic;
 
-namespace MicroLang.Compiler.HighLevelParser.Classes;
+namespace MicroLang.Compiler.HighLevelParser.Common;
 
-class ArgListEvaluator
+public class ValueEvaluator
 {
-    internal static void EvalAsTreeNode(Scanner scanner, TreeNode argumentsNode)
+    // value &? ValueName <CommaSeparatedGenericTypes>? (( params ))
+    internal static TreeNode EvalAsTreeNode(Scanner scanner)
     {
+        scanner.Advance("value");
+        TreeNode resultNode = new TreeNode("value");
+        bool isRef = scanner.MoveIf("?");
+        resultNode["isRef"] = ""+isRef;
+        string name = scanner.Move().Text;
+        resultNode["name"] = name;
+        
+        if (scanner.MoveIf("<"))
+        {
+            GenericsListEvaluator.EvalAsTreeNode(scanner, resultNode);
+        }
+        
+        if (scanner.MoveIf("("))
+        {
+            EvalAsTreeNode(scanner, resultNode);
+        }
+        return resultNode;
+    }
+    
+    private static void EvalAsTreeNode(Scanner scanner, TreeNode resultNode)
+    {
+        TreeNode argumentsNode = resultNode.Child("Params");
         List<string> paramNames = new List<string>();
         List<string> paramsTypes = new List<string>();
         bool readParamNames = true;
@@ -49,10 +72,6 @@ class ArgListEvaluator
                     readParamNames = true;
                 }
             }
-            
-            
-            
-            
         }
     }
 }

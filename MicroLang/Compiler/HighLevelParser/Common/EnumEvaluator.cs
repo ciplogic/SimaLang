@@ -2,7 +2,7 @@
 using MicroLang.Compiler.Semantic;
 using MicroLang.Utils;
 
-namespace MicroLang.Compiler.HighLevelParser;
+namespace MicroLang.Compiler.HighLevelParser.Common;
 
 public static class EnumEvaluator
 {

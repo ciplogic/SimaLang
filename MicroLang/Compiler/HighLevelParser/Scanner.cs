@@ -1,4 +1,5 @@
-﻿using MicroLang.Compiler.Lexer.Tok;
+﻿using System.Text;
+using MicroLang.Compiler.Lexer.Tok;
 using MicroLang.Utils;
 
 namespace MicroLang.Compiler.HighLevelParser;
@@ -56,6 +57,24 @@ public class Scanner(Slice<Token> tokens)
         return false;
     }
 
+    public override string ToString()
+    {
+        var sb = new StringBuilder();
+        for(var i =0; i<Tokens.Len; i++)
+        {
+            sb.Append(Tokens[i].Text);
+            if (Tokens[i].Kind == TokenKind.ReservedWord)
+            {
+                sb.Append(" ");
+            }
+        }
+
+        return sb.ToString();
+    }
+
     public bool Peek(string text) 
         => Tokens[0].Text == text;
+
+    public bool Peek(TokenKind kind)
+        => Tokens[0].Kind == kind;
 }

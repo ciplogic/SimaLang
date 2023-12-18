@@ -1,6 +1,6 @@
 ﻿using System.Diagnostics;
 using MicroLang.Compiler.Constants;
-using MicroLang.Compiler.HighLevelParser.Classes;
+using MicroLang.Compiler.HighLevelParser.Common;
 using MicroLang.Compiler.Lexer.Tok;
 using MicroLang.Compiler.Semantic;
 using MicroLang.Utils;
@@ -49,7 +49,7 @@ internal class HighLevelParse
             return tokens.SubSlice(endWithBlock + 1);
         }
 
-        int matchBlock = MatchBlock(tokens, "{", "}");
+        int matchBlock = MatchBlock(tokens, "{", "}", body);
         Debug.Assert(matchBlock!=-1);
 
         return default;
@@ -72,8 +72,11 @@ internal class HighLevelParse
         }
     }
 
-    int MatchBlock(Slice<Token> tokens, string openToken, string closeToken)
+    int MatchBlock(Slice<Token> tokens, string openToken, string closeToken, TreeNode body)
     {
+        Scanner scanner = new (tokens);
+        TreeNode declaration = FunctionDeclareEvaluator.EvalAsTreeNode(scanner);
+        body.Children.Add(declaration);
         Debug.Assert(tokens[0].Text == openToken);
 
         return -1;

@@ -1,11 +1,12 @@
 ﻿using MicroLang.Compiler.Semantic;
 
-namespace MicroLang.Compiler.HighLevelParser.Classes;
+namespace MicroLang.Compiler.HighLevelParser;
 
 public class GenericsListEvaluator
 {
-    public static void EvalAsTreeNode(Scanner scanner, TreeNode genericsNode)
+    public static void EvalAsTreeNode(Scanner scanner, TreeNode resultNode)
     {
+        TreeNode genericsNode = resultNode.Child("Generics");
         while (scanner.CanMove)
         {
             if (scanner.MoveIf(","))
