@@ -8,10 +8,5 @@
         <LangVersion>12</LangVersion>
     </PropertyGroup>
 
-    <ItemGroup>
-      <None Update="Examples\file01.sl">
-        <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-      </None>
-    </ItemGroup>
 
 </Project>
