@@ -28,7 +28,6 @@ public class FunctionDeclareEvaluator
     private static void EvalParamsAsTreeNode(Scanner scanner, TreeNode resultNode)
     {
         var argsNode = resultNode.Child("Args");
-        List<string> paramDef = new();
         while (true)
         {
             if (scanner.MoveIf(")"))

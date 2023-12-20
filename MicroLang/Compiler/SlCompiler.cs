@@ -2,12 +2,18 @@
 using MicroLang.Compiler.Lexer.Tok;
 using MicroLang.Compiler.Semantic;
 using MicroLang.Utils;
+using static MicroLang.Utils.ResUtils;
 
 namespace MicroLang.Compiler;
 
 internal class SlCompiler
 {
-    private string _libsPath = "";
+    public string LibsPath { get; }
+
+    public SlCompiler(string libsPath)
+    {
+        LibsPath = libsPath;
+    }
 
     internal SemanticTree Program { get; } = new();
     internal TreeNode ParseFile(string fileName)
@@ -22,5 +28,21 @@ internal class SlCompiler
         Console.WriteLine(rootNode);
 
         return default;
+    }
+
+    public Res<TreeNode> CompileLib(string lib)
+    {
+        var libFullPath = Path.Join(LibsPath, lib);
+        if (!Directory.Exists(libFullPath))
+        {
+            return Fail<TreeNode>("Compiler: Path not found: " + libFullPath);
+        }
+
+        var dirFiles = Directory.GetFiles(libFullPath, "*.sl", SearchOption.TopDirectoryOnly);
+
+        var result = new TreeNode("Library");
+        result["name"] = lib;
+
+        return ResUtils.Ok<TreeNode>(result);
     }
 }

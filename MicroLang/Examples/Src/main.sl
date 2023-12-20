@@ -1,2 +1,2 @@
-﻿fn main() -> int32{
+﻿fn main() -> int4{
 }
