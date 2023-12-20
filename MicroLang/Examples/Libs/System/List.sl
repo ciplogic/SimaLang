@@ -1,0 +1,6 @@
+﻿value& arr<T>(Len: int32)
+value& list<T>(Items: arr<T>, Len: int32)
+value result<T>(Value:T; Error:str)
+value& str(Data: arr<i8>)
+value MapDataRaw<Key,Value>(key: Key, value: Value; Hash, Prev: int32)
+value& map<Key,Value>(Values: list<MapDataRaw>; Buckets: arr<int32>)
