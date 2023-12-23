@@ -9,9 +9,9 @@ fn select<From, To>(values: *From, mapper:Mapper<From,To>): *To {
        yield *value
     }
 } 
-value Point (x: int4, y: int4) 
+value Point (x: i32, y: i32) 
 
-fn main():int4 {
+fn main():i32 {
     x = 2.toStr()
     pt = Point(3,5)
     fn printIt (i) { 

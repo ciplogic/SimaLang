@@ -24,10 +24,7 @@ internal class SlCompiler
         Token[] tokenArray = tokensRes.Value.ToArray();
         HighLevelParse highLevelParse = new HighLevelParse();
         TreeNode rootNode = highLevelParse.ParseFileHighLevel(tokenArray);
-        Console.WriteLine("Parse result:");
-        Console.WriteLine(rootNode);
-
-        return default;
+        return rootNode;
     }
 
     public Res<TreeNode> CompileLib(string lib)
@@ -42,6 +39,12 @@ internal class SlCompiler
 
         var result = new TreeNode("Library");
         result["name"] = lib;
+
+        foreach (string dirFile in dirFiles)
+        {
+            TreeNode compiledFile = this.ParseFile(dirFile);
+            result.Children.Add(compiledFile);
+        }
 
         return ResUtils.Ok<TreeNode>(result);
     }

@@ -67,6 +67,11 @@ class Lexer
             span = span.SubSlice(token.Value.Text.Length);
         }
 
+        if (result[^1].Kind != TokenKind.Eoln)
+        {
+            result.Add(new Token(TokenKind.Eoln, "\n"));
+        }
+        
         return result.Ok();
     }
 }
