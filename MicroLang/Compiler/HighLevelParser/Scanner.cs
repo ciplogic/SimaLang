@@ -6,7 +6,7 @@ namespace MicroLang.Compiler.HighLevelParser;
 
 public class Scanner(Slice<Token> tokens)
 {
-    private Slice<Token> Tokens { get; set; } = tokens;
+    public Slice<Token> Tokens { get; set; } = tokens;
     public bool CanMove => Tokens.Len > 0;
 
     public Token Move(int count = 1)
@@ -39,8 +39,7 @@ public class Scanner(Slice<Token> tokens)
             Move();
             return true;
         }
-
-        ;
+        
         return false;
     }
 
@@ -77,4 +76,20 @@ public class Scanner(Slice<Token> tokens)
 
     public bool Peek(TokenKind kind)
         => Tokens[0].Kind == kind;
+
+    public string PeekText()
+    {
+        return Tokens[0].Text;
+    }
+
+    public bool MoveIf(TokenKind tokenKind)
+    {
+        if (Tokens[0].Kind != tokenKind)
+        {
+            return false;
+        }
+        Move();
+        return true;
+
+    }
 }

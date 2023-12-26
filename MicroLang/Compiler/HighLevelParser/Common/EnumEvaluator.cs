@@ -6,9 +6,9 @@ namespace MicroLang.Compiler.HighLevelParser.Common;
 
 public static class EnumEvaluator
 {
-    internal static TreeNode EvalAsTreeNode(Slice<Token> tokens)
+    internal static TreeNode EvalAsTreeNode(Scanner scanner)
     {
-        var ev = Eval(tokens);
+        var ev = Eval(scanner);
         return ToTreeNode(ev.Fields, ev.Name);
     }
 
@@ -25,10 +25,8 @@ public static class EnumEvaluator
         
         return result;
     }
-    internal static (string Name, List<(string Key, long Value)> Fields) Eval(Slice<Token> tokens)
+    internal static (string Name, List<(string Key, long Value)> Fields) Eval(Scanner scanner)
     {
-        Scanner scanner = new Scanner(tokens);
-        
         string enumName = scanner.Advance("enum").Move().Text;
         scanner.Advance("(");
         
