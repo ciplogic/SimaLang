@@ -9,30 +9,37 @@ public class FunctionBodyEvaluator
     {
         var resultNode = new TreeNode("CodeBlock");
         scanner.Advance("{");
-        while (scanner.MoveIf(TokenKind.Eoln))
+        while (true)
         {
-        }
 
-        if (scanner.Peek(TokenKind.ReservedWord))
-        {
-            string reservedWord = scanner.PeekText();
-            switch (reservedWord)
+
+            if (scanner.Peek(TokenKind.ReservedWord))
             {
-                case "if":
-                case "while":
-                case "for":
-                    
-                    break;
-                
-                case "return":
-                    AddPerLineExpression("return", scanner, resultNode);
-                    break;
-            }
-            
-            
+                string reservedWord = scanner.PeekText();
+                switch (reservedWord)
+                {
+                    case "if":
+                    case "while":
+                    case "for":
 
+                        break;
+
+                    case "return":
+                        AddPerLineExpression("return", scanner, resultNode);
+                        break;
+                }
+
+            }
+
+            while (scanner.MoveIf(TokenKind.Eoln))
+            {
+            }
+
+            if (scanner.MoveIf("}"))
+            {
+                return resultNode;
+            }
         }
-        return resultNode;
     }
 
     private static void AddPerLineExpression(string statementType, Scanner scanner, TreeNode resultNode)

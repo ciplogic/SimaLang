@@ -43,7 +43,7 @@ internal class HighLevelParse
         if (tokens[endWithBlock].Kind == TokenKind.Eoln)
         {
             Slice<Token> simpleDeclarationSpan = tokens.SubSlice(0, endWithBlock-1);
-            ParseOneRowDeclaration(simpleDeclarationSpan, body);
+            ParseOneRowDeclaration(new Scanner(simpleDeclarationSpan), body);
 
             return tokens.SubSlice(endWithBlock + 1);
         }
@@ -54,19 +54,18 @@ internal class HighLevelParse
         return default;
     }
 
-    private void ParseOneRowDeclaration(Slice<Token> oneLineDeclaration, TreeNode body)
+    private void ParseOneRowDeclaration(Scanner scanner, TreeNode body)
     {
-        switch (oneLineDeclaration[0].Text)
+        switch (scanner.PeekText())
         {
             case "value":
             {
-                var scanner = new Scanner(oneLineDeclaration);
                 var treeNode = ValueEvaluator.EvalAsTreeNode(scanner);
                 body.Children.Add(treeNode);
             }
                 break;
             case "enum":
-                body.Children.Add(EnumEvaluator.EvalAsTreeNode(oneLineDeclaration));
+                body.Children.Add(EnumEvaluator.EvalAsTreeNode(scanner));
                 break;
         }
     }
