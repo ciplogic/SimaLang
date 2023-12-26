@@ -77,7 +77,7 @@ internal class HighLevelParse
         Scanner scanner = new (tokens);
         TreeNode declaration = FunctionDeclareEvaluator.EvalAsTreeNode(scanner);
         body.Children.Add(declaration);
-        Debug.Assert(tokens[0].Text == openToken);
+        Debug.Assert(scanner.Peek(openToken));
 
         return -1;
     }
