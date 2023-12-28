@@ -34,14 +34,8 @@ public class FunctionDeclareEvaluator
 
     private static void EvalFunctionBody(Scanner scanner, TreeNode resultNode)
     {
-        while (true)
-        {
-            TreeNode functionBody = FunctionBodyEvaluator.EvalAsTreeNode(scanner);
-            resultNode.Children.Add(functionBody);
-            
-            
-        }
-        
+        TreeNode functionBody = FunctionBodyEvaluator.EvalAsTreeNode(scanner);
+        resultNode.Children.Add(functionBody);
     }
 
     private static void EvalFunctionReturnType(Scanner scanner, TreeNode resultNode)

@@ -42,6 +42,7 @@ internal class SlCompiler
 
         foreach (string dirFile in dirFiles)
         {
+            Console.WriteLine($"Compiling: {dirFile}");
             TreeNode compiledFile = this.ParseFile(dirFile);
             result.Children.Add(compiledFile);
         }

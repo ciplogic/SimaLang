@@ -12,10 +12,10 @@ fn select<From, To>(values: *From, mapper:Mapper<From,To>): *To {
 value Point (x: i32, y: i32) 
 
 fn main():i32 {
-    x = 2.toStr()
-    pt = Point(3,5)
-    fn printIt (i) { 
+    fn printIt () { 
       print ("Hello: ${x}");
     };
-    printIt(x)
+    x = 2.toStr()
+    pt = Point(3,5)
+    printIt()
 }

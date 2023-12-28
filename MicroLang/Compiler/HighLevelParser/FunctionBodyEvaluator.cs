@@ -11,8 +11,6 @@ public class FunctionBodyEvaluator
         scanner.Advance("{");
         while (true)
         {
-
-
             if (scanner.Peek(TokenKind.ReservedWord))
             {
                 string reservedWord = scanner.PeekText();

@@ -50,8 +50,6 @@ internal class HighLevelParse
         }
 
         int matchBlock = MatchBlock(tokens, "{", "}", body);
-        Debug.Assert(matchBlock!=-1);
-
         return default;
     }
 
@@ -80,7 +78,6 @@ internal class HighLevelParse
             {
                 TreeNode declaration = FunctionDeclareEvaluator.EvalAsTreeNode(scanner);
                 body.Children.Add(declaration);
-                Debug.Assert(scanner.Peek(openToken));
                 break;
             }
         }
