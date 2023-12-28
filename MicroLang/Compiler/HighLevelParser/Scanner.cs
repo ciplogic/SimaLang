@@ -1,5 +1,5 @@
 ﻿using System.Text;
-using MicroLang.Compiler.Lexer.Tok;
+using MicroLang.Compiler.Lex.Tok;
 using MicroLang.Utils;
 
 namespace MicroLang.Compiler.HighLevelParser;

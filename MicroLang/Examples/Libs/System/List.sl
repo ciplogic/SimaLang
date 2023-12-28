@@ -1,4 +1,4 @@
-﻿value& arr<T>(Len: i32)
-value& list<T>(Items: arr<T>; Len: i32)
-value result<T>(Value:T; Error:str)
-value& str(Data: arr<i8>)
+﻿value& Arr[T](Len: i32)
+value& List[T](Items: Arr[T]; Len: i32)
+value Result[T](Value:T; Error:Str)
+value& Str(Data: arr[i8])

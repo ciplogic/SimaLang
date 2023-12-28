@@ -1,8 +1,8 @@
-﻿using MicroLang.Compiler.Lexer.Rules;
-using MicroLang.Compiler.Lexer.Tok;
+﻿using MicroLang.Compiler.Lex.Rules;
+using MicroLang.Compiler.Lex.Tok;
 using MicroLang.Utils;
-using static MicroLang.Utils.ResUtils;
-namespace MicroLang.Compiler.Lexer;
+
+namespace MicroLang.Compiler.Lex;
 
 class Lexer
 {
@@ -57,7 +57,7 @@ class Lexer
             if (!token.HasValue)
             {
                 string notFoundText = span.AsText(span.Len);
-                return Fail<List<Token>>($"Cannot find token for: {notFoundText}");
+                return ResUtils.Fail<List<Token>>($"Cannot find token for: {notFoundText}");
             }
 
             if (!SkipSpaces  || !IsSpaceToken(token.Value.Kind))

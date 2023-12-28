@@ -1,4 +1,4 @@
-﻿namespace MicroLang.Compiler.Lexer.Tok;
+﻿namespace MicroLang.Compiler.Lex.Tok;
 
 public record struct Token(TokenKind Kind, string Text)
 {

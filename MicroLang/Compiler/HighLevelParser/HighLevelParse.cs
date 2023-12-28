@@ -1,7 +1,7 @@
 ﻿using System.Diagnostics;
 using MicroLang.Compiler.Constants;
 using MicroLang.Compiler.HighLevelParser.Common;
-using MicroLang.Compiler.Lexer.Tok;
+using MicroLang.Compiler.Lex.Tok;
 using MicroLang.Compiler.Semantic;
 using MicroLang.Utils;
 

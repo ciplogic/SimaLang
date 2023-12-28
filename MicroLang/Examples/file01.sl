@@ -1,10 +1,10 @@
 ﻿//one method interface
-interface Supplier<T>() T
-interface Consumer<T>(val:T)
-interface Mapper<From, To>(From):To
+interface Supplier[T]() T
+interface Consumer[T](val:T)
+interface Mapper[From, To](From):To
 interface Runnable()
 
-fn select<From, To>(values: *From, mapper:Mapper<From,To>): *To {
+fn select[From, To](values: *From, mapper:Mapper[From,To]): *To {
     for it:values {
        yield *value
     }

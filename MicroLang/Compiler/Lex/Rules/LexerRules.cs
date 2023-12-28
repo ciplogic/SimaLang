@@ -1,7 +1,7 @@
 ﻿using MicroLang.Utils;
-using static MicroLang.Compiler.Lexer.Rules.CharUtilities;
+using static MicroLang.Compiler.Lex.Rules.CharUtilities;
 
-namespace MicroLang.Compiler.Lexer.Rules;
+namespace MicroLang.Compiler.Lex.Rules;
 
 internal static class LexerRules
 {
@@ -71,7 +71,6 @@ internal static class LexerRules
         "elif",
         "else",
         "enum",
-        "arr",
         "fn",
         "for",
         "if",

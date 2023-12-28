@@ -1,3 +1,3 @@
-﻿fn Len(this: str) : i32 {
+﻿fn Len(this: Str) : i32 {
    return this.Data.Len-1
 }

@@ -1,6 +1,6 @@
 ﻿using MicroLang.Utils;
 
-namespace MicroLang.Compiler.Lexer.Rules;
+namespace MicroLang.Compiler.Lex.Rules;
 
 internal static class CharUtilities
 {

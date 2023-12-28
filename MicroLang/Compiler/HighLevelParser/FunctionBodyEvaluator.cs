@@ -1,4 +1,4 @@
-﻿using MicroLang.Compiler.Lexer.Tok;
+﻿using MicroLang.Compiler.Lex.Tok;
 using MicroLang.Compiler.Semantic;
 
 namespace MicroLang.Compiler.HighLevelParser;
