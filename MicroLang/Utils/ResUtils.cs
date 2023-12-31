@@ -1,4 +1,6 @@
-﻿namespace MicroLang.Utils;
+﻿using MicroLang.Compiler.FirstPassParser;
+
+namespace MicroLang.Utils;
 
 internal static class ResUtils
 {

@@ -9,12 +9,14 @@ enum AstNodeKind
     Terminal,
     Program,
     Block,
+    Declaration,
+    World
 }
-class PassOneAstNode
+class PassOneAstNode(AstNodeKind Kind)
 {
+    public AstNodeKind Kind { get; } = Kind;
     public List<PassOneAstNode> Children = new();
     public Token Tok;
-    public AstNodeKind Kind;
 }
 
 public class ParserPassOne
@@ -66,10 +68,9 @@ public class ParserPassOne
 
     private static int FoldParenRange(List<PassOneAstNode> foldableSection, Token tok, int startIndex, int endIndexInclusive)
     {
-        var foldableTok = new PassOneAstNode()
+        var foldableTok = new PassOneAstNode(AstNodeKind.Block)
         {
-            Kind = AstNodeKind.Block,
-            Tok = tok
+            Tok = foldableSection[startIndex].Tok
         };
         for (var i = startIndex + 1; i < endIndexInclusive; i++)
         {
@@ -81,26 +82,22 @@ public class ParserPassOne
         return startIndex;
     }
 
-
     internal static PassOneAstNode Parse(Slice<Token> tokens)
     {
-        var program = new PassOneAstNode()
+        var program = new PassOneAstNode(AstNodeKind.Program)
         {
-            Kind = AstNodeKind.Program
         };
         for (var i = 0; i<tokens.Len; i++)
         {
-            program.Children.Add(new PassOneAstNode()
+            program.Children.Add(new PassOneAstNode(AstNodeKind.Terminal)
             {
                 Tok = tokens[i],
-                Kind = AstNodeKind.Terminal
             });
         }
-
         FoldParens(program.Children);
         
-
+        ReservedWordsFolder.FoldDeclarations(program.Children);
+        
         return program;
-
     } 
 }
