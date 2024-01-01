@@ -9,6 +9,11 @@ static class ReservedWordsFolder
     {
         ("enum", false),
         ("value", false),
+        ("return", false),
+        ("for", true),
+        ("if", true),
+        ("elif", true),
+        ("else", true),
         ("fn", true)
     };
 
@@ -28,6 +33,27 @@ static class ReservedWordsFolder
 
         return null;
     }
+
+    static void FoldBodyDeclaration(PassOneAstNode parentBlockNode)
+    {
+        FoldDeclarations(parentBlockNode.Children);
+        
+        //TODO: fix this condition to handle recursive blocks
+        foreach (PassOneAstNode astNode in parentBlockNode.Children)
+        {
+            if (astNode.Kind != AstNodeKind.Declaration)
+            {
+                continue;
+            }
+
+            var lastDeclarationChild = astNode.Children[^1];
+            if (lastDeclarationChild.Kind == AstNodeKind.Block && lastDeclarationChild.Tok.Text == "{")
+            {
+                FoldBodyDeclaration(lastDeclarationChild);
+            }
+        }
+    }
+    
     public static void FoldDeclarations(List<PassOneAstNode> foldableSection)
     {
         for (var i = 0; i < foldableSection.Count; i++)
@@ -39,7 +65,11 @@ static class ReservedWordsFolder
                 continue;
             }
 
-            i = FoldReservedWord(foldableSection, i, match.Value.IsBlockEnded);
+            PassOneAstNode foldedDeclarationNode = FoldReservedWord(foldableSection, i, match.Value.IsBlockEnded);
+            if (foldedDeclarationNode.Tok.Text == "fn")
+            {
+                FoldBodyDeclaration(foldedDeclarationNode.Children[^1]);
+            }
         }
     }
 
@@ -59,7 +89,7 @@ static class ReservedWordsFolder
         return -1;
     }
 
-    private static int FoldReservedWord(List<PassOneAstNode> foldableSection, int index, bool valueIsBlockEnded)
+    private static PassOneAstNode FoldReservedWord(List<PassOneAstNode> foldableSection, int index, bool valueIsBlockEnded)
     {
         var endDeclarationIndex = EndIndexOfDeclaration(foldableSection, index, valueIsBlockEnded);
         var declarationNode = new PassOneAstNode(AstNodeKind.Declaration)
@@ -73,6 +103,6 @@ static class ReservedWordsFolder
         declarationNode.Children.AddRange(foldableSection.Skip(index+1).Take(length));
         foldableSection.RemoveRange(index+1, endDeclarationIndex - index);
         foldableSection[index] = declarationNode;
-        return index;
+        return declarationNode;
     }
 }
