@@ -2,51 +2,18 @@
 using MicroLang.Compiler.Lex.Tok;
 using MicroLang.Utils;
 
-namespace MicroLang.Compiler.FirstPassParser;
+namespace MicroLang.Compiler.Parser.FirstPassParser;
 
-enum AstNodeKind
+public static class ParserPassOne
 {
-    Terminal,
-    Program,
-    Block,
-    Declaration,
-    World
-}
-class PassOneAstNode(AstNodeKind Kind)
-{
-    public AstNodeKind Kind { get; } = Kind;
-    public List<PassOneAstNode> Children = new();
-    public Token Tok;
-}
-
-public class ParserPassOne
-{
-    static int IsOpeningToken(Token tok) 
-        => tok.Text switch
-        {
-            "{" => 1,
-            "(" => 2,
-            "[" => 3,
-            _ => 0
-        };
-
-    static int IsClosingToken(Token tok) 
-        => tok.Text switch
-        {
-            "}" => 1,
-            ")" => 2,
-            "]" => 3,
-            _ => 0
-        };
-
     static void FoldParens(List<PassOneAstNode> foldableSection)
     {
         Stack<(int index, int openType)> OpeningTokPos = new Stack<(int index, int openType)>();
         for (var i = 0; i < foldableSection.Count; i++)
         {
             var tok = foldableSection[i].Tok;
-            int openIndex = IsOpeningToken(tok);
-            int closeIndex = IsClosingToken(tok);
+            int openIndex = tok.IsOpeningToken();
+            int closeIndex = tok.IsClosingToken();
             if (openIndex == 0 && closeIndex == 0)
             {
                 continue;

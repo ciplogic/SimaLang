@@ -1,6 +1,6 @@
 ﻿using MicroLang.Compiler.Lex.Tok;
 
-namespace MicroLang.Compiler.FirstPassParser;
+namespace MicroLang.Compiler.Parser.FirstPassParser;
 
 static class ReservedWordsFolder
 {
@@ -73,13 +73,13 @@ static class ReservedWordsFolder
         }
     }
 
+
     static int EndIndexOfDeclaration(List<PassOneAstNode> foldableSection, int startIndex, bool valueIsBlockEnded)
     {
         for (var i = startIndex + 1; i < foldableSection.Count; i++)
         {
             PassOneAstNode currentAstNode = foldableSection[i];
-            var found = (valueIsBlockEnded && currentAstNode.Kind == AstNodeKind.Block && currentAstNode.Tok.Text == "{")
-                        || currentAstNode.Tok.Kind == TokenKind.Eoln;
+            var found = (valueIsBlockEnded && currentAstNode.IsCurlyBlockNode()) || currentAstNode.Tok.Kind == TokenKind.Eoln;
             if (found)
             {
                 return i;

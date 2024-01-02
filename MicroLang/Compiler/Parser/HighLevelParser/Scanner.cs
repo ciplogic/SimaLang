@@ -2,7 +2,7 @@
 using MicroLang.Compiler.Lex.Tok;
 using MicroLang.Utils;
 
-namespace MicroLang.Compiler.HighLevelParser;
+namespace MicroLang.Compiler.Parser.HighLevelParser;
 
 public class Scanner(Slice<Token> tokens)
 {

@@ -1,6 +1,6 @@
-﻿using MicroLang.Compiler.FirstPassParser;
-using MicroLang.Compiler.Lex;
+﻿using MicroLang.Compiler.Lex;
 using MicroLang.Compiler.Lex.Tok;
+using MicroLang.Compiler.Parser.FirstPassParser;
 using MicroLang.Compiler.Semantic;
 using MicroLang.Utils;
 using static MicroLang.Utils.ResUtils;

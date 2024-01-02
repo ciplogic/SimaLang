@@ -6,5 +6,8 @@
         <Nullable>enable</Nullable>
         <LangVersion>12</LangVersion>
     </PropertyGroup>
+    <ItemGroup>
+      <Folder Include="Compiler\Parser\" />
+    </ItemGroup>
 </Project>
 

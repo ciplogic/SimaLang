@@ -1,11 +1,9 @@
-﻿using System.Diagnostics;
-using MicroLang.Compiler.Constants;
-using MicroLang.Compiler.HighLevelParser.Common;
-using MicroLang.Compiler.Lex.Tok;
+﻿using MicroLang.Compiler.Lex.Tok;
+using MicroLang.Compiler.Parser.HighLevelParser.Common;
 using MicroLang.Compiler.Semantic;
 using MicroLang.Utils;
 
-namespace MicroLang.Compiler.HighLevelParser;
+namespace MicroLang.Compiler.Parser.HighLevelParser;
 
 internal class HighLevelParse
 {

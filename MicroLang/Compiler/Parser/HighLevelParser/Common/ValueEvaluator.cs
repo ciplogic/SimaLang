@@ -1,6 +1,6 @@
 ﻿using MicroLang.Compiler.Semantic;
 
-namespace MicroLang.Compiler.HighLevelParser.Common;
+namespace MicroLang.Compiler.Parser.HighLevelParser.Common;
 
 public class ValueEvaluator
 {

@@ -1,6 +1,6 @@
 ﻿using MicroLang.Compiler.Semantic;
 
-namespace MicroLang.Compiler.HighLevelParser;
+namespace MicroLang.Compiler.Parser.HighLevelParser;
 
 public class GenericsListEvaluator
 {
