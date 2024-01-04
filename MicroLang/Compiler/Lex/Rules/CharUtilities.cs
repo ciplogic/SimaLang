@@ -21,8 +21,10 @@ internal static class CharUtilities
 
         return text.Len;
     }
-    internal static int MatchFunc(Slice<char> text, Predicate<char> matchAll) 
-        => MatchFunc(text, matchAll, matchAll);
+    internal static int MatchFunc(Slice<char> text, Predicate<char> matchAll)
+    {
+        return MatchFunc(text, matchAll, matchAll);
+    }
 
     internal static int MatchStartAny(Slice<char> text, string[] textsStartWith)
     {
@@ -65,14 +67,21 @@ internal static class CharUtilities
         return true;
     }
     internal static bool IsSpace(char ch)
-        => ch == ' ' || ch == '\t';
+    {
+        return ch == ' ' || ch == '\t';
+    }
+
     internal static bool IsDigit(char ch)
-        => ch >= '0' && ch <= '9';
+    {
+        return ch >= '0' && ch <= '9';
+    }
 
     internal static bool IsAlpha(char ch)
-        => (ch >= 'a' && ch <= 'z') ||
-           (ch >= 'A' && ch <= 'Z') ||
-           (ch == '_');
+    {
+        return (ch >= 'a' && ch <= 'z') ||
+               (ch >= 'A' && ch <= 'Z') ||
+               (ch == '_');
+    }
 
     internal static bool IsAlphaDigit(char ch)
         => IsAlpha(ch) || IsDigit(ch);
