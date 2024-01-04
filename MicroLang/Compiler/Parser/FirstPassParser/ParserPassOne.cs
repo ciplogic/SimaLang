@@ -6,7 +6,7 @@ namespace MicroLang.Compiler.Parser.FirstPassParser;
 
 public static class ParserPassOne
 {
-    static void FoldParens(List<PassOneAstNode> foldableSection)
+    static void FoldParens(List<TreeNodeParse> foldableSection)
     {
         Stack<(int index, int openType)> OpeningTokPos = new Stack<(int index, int openType)>();
         for (var i = 0; i < foldableSection.Count; i++)
@@ -33,9 +33,9 @@ public static class ParserPassOne
         Debug.Assert(OpeningTokPos.Count == 0);
     }
 
-    private static int FoldParenRange(List<PassOneAstNode> foldableSection, Token tok, int startIndex, int endIndexInclusive)
+    private static int FoldParenRange(List<TreeNodeParse> foldableSection, Token tok, int startIndex, int endIndexInclusive)
     {
-        var foldableTok = new PassOneAstNode(AstNodeKind.Block)
+        var foldableTok = new TreeNodeParse(AstNodeKind.Block)
         {
             Tok = foldableSection[startIndex].Tok
         };
@@ -49,21 +49,21 @@ public static class ParserPassOne
         return startIndex;
     }
 
-    internal static PassOneAstNode Parse(Slice<Token> tokens)
+    internal static TreeNodeParse Parse(Slice<Token> tokens)
     {
-        var program = new PassOneAstNode(AstNodeKind.Program)
-        {
-        };
-        for (var i = 0; i<tokens.Len; i++)
-        {
-            program.Children.Add(new PassOneAstNode(AstNodeKind.Terminal)
+        var program = new TreeNodeParse(AstNodeKind.Program);
+        var tokensArr = tokens.Arr;
+        program.Children.AddRange(
+            tokensArr.Select(tok =>new TreeNodeParse(AstNodeKind.Terminal)
             {
-                Tok = tokens[i],
-            });
-        }
+                Tok = tok,
+            })
+            );
+        
         FoldParens(program.Children);
         
         ReservedWordsFolder.FoldDeclarations(program.Children);
+        StatementsAndAssignsFolder.FoldStatements(program);
         
         return program;
     } 

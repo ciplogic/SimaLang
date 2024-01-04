@@ -2,7 +2,7 @@ using MicroLang.Compiler.Lex.Tok;
 
 namespace MicroLang.Compiler.Parser.FirstPassParser;
 
-public static class PassOneAstNodeUtils
+public static class TreeNodeParseUtils
 {
     public static int IsOpeningToken(this Token tok) 
         => tok.Text switch
@@ -22,6 +22,6 @@ public static class PassOneAstNodeUtils
             _ => 0
         };
 
-    public static bool IsCurlyBlockNode(this PassOneAstNode currentAstNode) 
-        => currentAstNode.Kind == AstNodeKind.Block && currentAstNode.Tok.Text == "{";
+    public static bool IsCurlyBlockNode(this TreeNodeParse currentAstNodeParse) 
+        => currentAstNodeParse.Kind == AstNodeKind.Block && currentAstNodeParse.Tok.Text == "{";
 }

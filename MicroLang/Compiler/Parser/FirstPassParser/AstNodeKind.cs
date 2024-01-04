@@ -6,5 +6,6 @@ public enum AstNodeKind
     Program,
     Block,
     Declaration,
-    World
+    World,
+    Statement
 }

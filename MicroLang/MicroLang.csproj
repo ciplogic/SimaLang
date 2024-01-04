@@ -7,7 +7,7 @@
         <LangVersion>12</LangVersion>
     </PropertyGroup>
     <ItemGroup>
-      <Folder Include="Compiler\Parser\" />
+      <Folder Include="Compiler\Parser\SemanticTree\" />
     </ItemGroup>
 </Project>
 

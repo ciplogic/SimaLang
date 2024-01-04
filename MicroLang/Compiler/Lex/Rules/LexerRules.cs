@@ -19,7 +19,7 @@ internal static class LexerRules
         {
             return 0;
         }
-        int matchLen = MatchFunc(text, IsQuotingChar, ch => ch == firstChar);
+        int matchLen = MatchFunc(text, IsQuotingChar, ch => ch != firstChar);
         return matchLen + 1;
     }
     
@@ -51,7 +51,7 @@ internal static class LexerRules
         return MatchFunc(text, IsEoln);
     }
 
-    private static string[] _operators = { 
+    private static readonly string[] Operators = { 
         "...",".", 
         "=>",
         "<", ">", 
@@ -64,7 +64,7 @@ internal static class LexerRules
     };
 
     internal static int MatchOperatorLen(Slice<char> text) 
-        => MatchStartAny(text, _operators);
+        => MatchStartAny(text, Operators);
     
     private static readonly string[] ReservedWords = { 
         "enum",

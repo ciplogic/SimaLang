@@ -4,12 +4,32 @@ namespace MicroLang.Compiler.Parser.FirstPassParser;
 
 static class ReservedWordsFolder
 {
+    public static void FoldDeclarations(List<TreeNodeParse> foldableSection)
+    {
+        for (var i = 0; i < foldableSection.Count; i++)
+        {
+            var tok = foldableSection[i].Tok;
+            var match = IsMatchReservedWord(tok);
+            if (match is null)
+            {
+                continue;
+            }
 
+            TreeNodeParse foldedDeclarationNodeParse = FoldReservedWord(foldableSection, i, match.Value.IsBlockEnded);
+            if (foldedDeclarationNodeParse.Tok.Text == "fn")
+            {
+                FoldBodyDeclaration(foldedDeclarationNodeParse.Children[^1]);
+            }
+        }
+    }
+    
     private static (string ReservedWord, bool IsBlockEnded)[] Words =
     {
         ("enum", false),
         ("value", false),
+        ("yield", false),
         ("return", false),
+        ("interface", false),
         ("for", true),
         ("if", true),
         ("elif", true),
@@ -34,14 +54,19 @@ static class ReservedWordsFolder
         return null;
     }
 
-    static void FoldBodyDeclaration(PassOneAstNode parentBlockNode)
+    static void FoldBodyDeclaration(TreeNodeParse parentBlockNodeParse)
     {
-        FoldDeclarations(parentBlockNode.Children);
+        FoldDeclarations(parentBlockNodeParse.Children);
         
         //TODO: fix this condition to handle recursive blocks
-        foreach (PassOneAstNode astNode in parentBlockNode.Children)
+        foreach (TreeNodeParse astNode in parentBlockNodeParse.Children)
         {
             if (astNode.Kind != AstNodeKind.Declaration)
+            {
+                continue;
+            }
+
+            if (astNode.Children.Count == 0)
             {
                 continue;
             }
@@ -53,33 +78,13 @@ static class ReservedWordsFolder
             }
         }
     }
-    
-    public static void FoldDeclarations(List<PassOneAstNode> foldableSection)
-    {
-        for (var i = 0; i < foldableSection.Count; i++)
-        {
-            var tok = foldableSection[i].Tok;
-            var match = IsMatchReservedWord(tok);
-            if (match is null)
-            {
-                continue;
-            }
 
-            PassOneAstNode foldedDeclarationNode = FoldReservedWord(foldableSection, i, match.Value.IsBlockEnded);
-            if (foldedDeclarationNode.Tok.Text == "fn")
-            {
-                FoldBodyDeclaration(foldedDeclarationNode.Children[^1]);
-            }
-        }
-    }
-
-
-    static int EndIndexOfDeclaration(List<PassOneAstNode> foldableSection, int startIndex, bool valueIsBlockEnded)
+    static int EndIndexOfDeclaration(List<TreeNodeParse> foldableSection, int startIndex, bool valueIsBlockEnded)
     {
         for (var i = startIndex + 1; i < foldableSection.Count; i++)
         {
-            PassOneAstNode currentAstNode = foldableSection[i];
-            var found = (valueIsBlockEnded && currentAstNode.IsCurlyBlockNode()) || currentAstNode.Tok.Kind == TokenKind.Eoln;
+            TreeNodeParse currentAstNodeParse = foldableSection[i];
+            var found = (valueIsBlockEnded && currentAstNodeParse.IsCurlyBlockNode()) || currentAstNodeParse.Tok.Kind == TokenKind.Eoln;
             if (found)
             {
                 return i;
@@ -89,10 +94,10 @@ static class ReservedWordsFolder
         return -1;
     }
 
-    private static PassOneAstNode FoldReservedWord(List<PassOneAstNode> foldableSection, int index, bool valueIsBlockEnded)
+    private static TreeNodeParse FoldReservedWord(List<TreeNodeParse> foldableSection, int index, bool valueIsBlockEnded)
     {
         var endDeclarationIndex = EndIndexOfDeclaration(foldableSection, index, valueIsBlockEnded);
-        var declarationNode = new PassOneAstNode(AstNodeKind.Declaration)
+        var declarationNode = new TreeNodeParse(AstNodeKind.Declaration)
         {
             Tok = foldableSection[index].Tok
         };
