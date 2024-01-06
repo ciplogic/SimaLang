@@ -1,7 +1,7 @@
 ﻿using MicroLang.Compiler.Lex;
 using MicroLang.Compiler.Lex.Tok;
 using MicroLang.Compiler.Parser.DeclarationsParser;
-using MicroLang.Compiler.Parser.DeclarationsParser.Declarations;
+using MicroLang.Compiler.Parser.DeclarationsParser.Declarations.Common;
 using MicroLang.Compiler.Parser.FirstPassParser;
 using MicroLang.Utils;
 using static MicroLang.Utils.ResUtils;

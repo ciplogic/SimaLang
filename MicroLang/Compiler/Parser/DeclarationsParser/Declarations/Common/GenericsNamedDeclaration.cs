@@ -24,6 +24,6 @@ abstract class GenericsNamedDeclaration : NamedDeclaration
                 .ToArray();
         
         GenericTypeParams = tokenChildren;
-        return sliceTokens;
+        return sliceTokens.Skip(1);
     }
 }

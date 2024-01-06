@@ -11,7 +11,5 @@ internal class InterfaceDeclaration : GenericsNamedDeclaration
         Setup(declarationNode[0].Tok.Text, NamedDeclarationKind.Interface);
         declarationNode = declarationNode.Skip(1);
         declarationNode = ExtractGenerics(declarationNode);
-
     }
-
 }
