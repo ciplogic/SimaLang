@@ -2,7 +2,7 @@
 
 namespace MicroLang.Compiler.OutputWriter;
 
-public class CodeWriter
+public static class CodeWriter
 {
     public static void BuildCmakeList(string outFileName, string projectName, string cmakeMinVer, int cppStandard)
     {
@@ -13,5 +13,10 @@ public class CodeWriter
         sb.AppendLine($"add_executable(OutputCode main.cpp)");
         string fullCode = sb.ToString();
         File.WriteAllText(outFileName, fullCode);
+    }
+
+    public static void WriteCode(string outFile, List<SemanticDeclaration> declarations)
+    {
+        
     }
 }

@@ -29,14 +29,13 @@ internal class SlCompiler
         string[] dirFiles = Directory.GetFiles(libFullPath, "*.sl", SearchOption.TopDirectoryOnly);
         foreach (string dirFile in dirFiles)
         {
-            TreeNodeParse hlParsed = CompileFile(dirFile);
-            DeclarationParsing.Execute(libModule, lib, hlParsed);
+            TreeNodeParse hlParsed = CompileFile(libModule, dirFile);
         }
 
         return ResUtils.Ok<ModuleDeclarations>(libModule);
     }
 
-    public static TreeNodeParse CompileFile(string dirFile)
+    public static TreeNodeParse CompileFile(ModuleDeclarations libModule, string dirFile)
     {
         var lexer = new Lexer();
         var content = File.ReadAllText(dirFile);
@@ -44,6 +43,7 @@ internal class SlCompiler
         List<Token> words = scanResult.Value;
         var slice = Slice<Token>.Build(words.ToArray());
         TreeNodeParse hlParsed = ParserPassOne.Parse(slice);
+        DeclarationParsing.Execute(libModule, dirFile, hlParsed);
         hlParsed.Tok = new Token(TokenKind.Comment, dirFile);
         return hlParsed;
     }
