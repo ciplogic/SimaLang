@@ -9,7 +9,7 @@ public class DeclarationParsing
 {
     internal static void Execute(ModuleDeclarations moduleDeclarations, string libNameSpace, TreeNodeParse perFileTree)
     {
-        var parentDeclarations = perFileTree
+        TreeNodeParse[] parentDeclarations = perFileTree
             .Children
             .Where(node => node.Kind == AstNodeKind.Declaration)
             .ToArray();
@@ -17,7 +17,7 @@ public class DeclarationParsing
         foreach (TreeNodeParse declarationNode in parentDeclarations)
         {
             Slice<TreeNodeParse> slice = Slice<TreeNodeParse>.Build(declarationNode.Children.ToArray());
-            var namedDeclaration = AddDeclaration(moduleDeclarations, libNameSpace, declarationNode.Tok.Text, slice);
+            NamedDeclaration? namedDeclaration = AddDeclaration(moduleDeclarations, libNameSpace, declarationNode.Tok.Text, slice);
             if (namedDeclaration != null)
             {
                 namedDeclaration.NameSpace = libNameSpace;

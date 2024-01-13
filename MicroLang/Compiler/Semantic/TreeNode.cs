@@ -46,7 +46,7 @@ public record TreeNode(Dictionary<string, string> Fields, List<TreeNode> Childre
 
     public override string ToString()
     {
-        var objToSerialize = ToPrintableDict();
+        Dictionary<string, object> objToSerialize = ToPrintableDict();
         return JsonSerializer.Serialize(objToSerialize, new JsonSerializerOptions()
         {
             WriteIndented = true
@@ -56,7 +56,7 @@ public record TreeNode(Dictionary<string, string> Fields, List<TreeNode> Childre
     Dictionary<string, object> ToPrintableDict()
     {
         Dictionary<string, object> result = new Dictionary<string, object>();
-        foreach (var field in Fields)
+        foreach (KeyValuePair<string, string> field in Fields)
         {
             result[field.Key] = field.Value;
         }

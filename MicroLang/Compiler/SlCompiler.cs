@@ -17,15 +17,14 @@ internal class SlCompiler
         LibsPath = libsPath;
     }
 
-    public Res<ModuleDeclarations> CompileLib(string lib)
+    public Res<ModuleDeclarations> CompileLib(ModuleDeclarations libModule, string lib)
     {
         string libFullPath = Path.Join(LibsPath, lib);
         if (!Directory.Exists(libFullPath))
         {
             return Fail<ModuleDeclarations>($"Compiler: Path not found: {libFullPath}.");
         }
-
-        ModuleDeclarations libModule = new();
+        
         string[] dirFiles = Directory.GetFiles(libFullPath, "*.sl", SearchOption.TopDirectoryOnly);
         foreach (string dirFile in dirFiles)
         {
@@ -37,11 +36,11 @@ internal class SlCompiler
 
     public static TreeNodeParse CompileFile(ModuleDeclarations libModule, string dirFile)
     {
-        var lexer = new Lexer();
-        var content = File.ReadAllText(dirFile);
+        Lexer lexer = new Lexer();
+        string content = File.ReadAllText(dirFile);
         Res<List<Token>> scanResult = lexer.Scan(content);
         List<Token> words = scanResult.Value;
-        var slice = Slice<Token>.Build(words.ToArray());
+        Slice<Token> slice = Slice<Token>.Build(words.ToArray());
         TreeNodeParse hlParsed = ParserPassOne.Parse(slice);
         DeclarationParsing.Execute(libModule, dirFile, hlParsed);
         hlParsed.Tok = new Token(TokenKind.Comment, dirFile);

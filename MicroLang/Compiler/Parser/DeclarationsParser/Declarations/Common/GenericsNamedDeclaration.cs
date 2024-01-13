@@ -9,7 +9,7 @@ abstract class GenericsNamedDeclaration : NamedDeclaration
     public string[] GenericTypeParams = Array.Empty<string>();
     protected Slice<TreeNodeParse> ExtractGenerics(Slice<TreeNodeParse> sliceTokens)
     {
-        var targetAstNode = sliceTokens[0];
+        TreeNodeParse targetAstNode = sliceTokens[0];
         if (targetAstNode.Tok.Text != "[")
         {
             return sliceTokens;

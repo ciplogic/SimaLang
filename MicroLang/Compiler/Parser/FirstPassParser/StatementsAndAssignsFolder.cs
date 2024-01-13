@@ -7,10 +7,10 @@ public class StatementsAndAssignsFolder
     public static void FoldStatements(TreeNodeParse parent)
     {
         List<TreeNodeParse> foldableSection = parent.Children;
-        for (var i = 0; i < foldableSection.Count; i++)
+        for (int i = 0; i < foldableSection.Count; i++)
         {
-            var astToken = foldableSection[i];
-            var tok = astToken.Tok;
+            TreeNodeParse astToken = foldableSection[i];
+            Token tok = astToken.Tok;
             switch (astToken.Kind)
             {
                 case AstNodeKind.Terminal:
@@ -28,7 +28,7 @@ public class StatementsAndAssignsFolder
                     {
                         break;
                     }
-                    var lastNode = astToken.Children[^1];
+                    TreeNodeParse lastNode = astToken.Children[^1];
                     if (lastNode.Tok.Text == "{")
                     {
                         FoldStatements(lastNode);
@@ -42,8 +42,8 @@ public class StatementsAndAssignsFolder
     private static TreeNodeParse FoldStatementWord(List<TreeNodeParse> foldableSection, int startPos)
     {
         TreeNodeParse result = new TreeNodeParse(AstNodeKind.Statement);
-        var endIndex = -1;
-        for (var index = startPos; index < foldableSection.Count; index++)
+        int endIndex = -1;
+        for (int index = startPos; index < foldableSection.Count; index++)
         {
             if (foldableSection[index].Tok.Kind == TokenKind.Eoln)
             {

@@ -17,25 +17,24 @@ internal class EnumDeclaration : NamedDeclaration
 
     private void ExtractValues(List<TreeNodeParse> treeNodes)
     {
-        var filteredNodes = treeNodes
+        Token[] filteredNodes = treeNodes
             .Select(node => node.Tok)
             .Where(tok => tok.Kind != TokenKind.Eoln)
             .ToArray();
 
-        var tokensSlice = Slice<Token>.Build(filteredNodes);
-        
+        Slice<Token> tokensSlice = Slice<Token>.Build(filteredNodes);
+
         Slice<Token>[] enumBody = tokensSlice
             .SplitWhen(tok => tok.Text == ",");
-        
+
         List<(string Key, long Value)> fields = new();
         foreach (Slice<Token> slice in enumBody)
         {
-            long evalValueSlice = EvalFieldValueSlice(slice, fields); 
-            fields.Add((slice[0].Text, evalValueSlice));    
+            long evalValueSlice = EvalFieldValueSlice(slice, fields);
+            fields.Add((slice[0].Text, evalValueSlice));
         }
 
-        this. Fields = fields;
-
+        Fields = fields;
     }
 
     private static long EvalFieldValueSlice(Slice<Token> slice, List<(string Key, long Value)> enumFields)

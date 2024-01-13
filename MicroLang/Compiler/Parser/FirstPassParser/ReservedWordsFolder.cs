@@ -6,10 +6,10 @@ static class ReservedWordsFolder
 {
     public static void FoldDeclarations(List<TreeNodeParse> foldableSection)
     {
-        for (var i = 0; i < foldableSection.Count; i++)
+        for (int i = 0; i < foldableSection.Count; i++)
         {
-            var tok = foldableSection[i].Tok;
-            var match = IsMatchReservedWord(tok);
+            Token tok = foldableSection[i].Tok;
+            (string ReservedWord, bool IsBlockEnded)? match = IsMatchReservedWord(tok);
             if (match is null)
             {
                 continue;
@@ -71,7 +71,7 @@ static class ReservedWordsFolder
                 continue;
             }
 
-            var lastDeclarationChild = astNode.Children[^1];
+            TreeNodeParse lastDeclarationChild = astNode.Children[^1];
             if (lastDeclarationChild.Kind == AstNodeKind.Block && lastDeclarationChild.Tok.Text == "{")
             {
                 FoldBodyDeclaration(lastDeclarationChild);
@@ -81,10 +81,10 @@ static class ReservedWordsFolder
 
     static int EndIndexOfDeclaration(List<TreeNodeParse> foldableSection, int startIndex, bool valueIsBlockEnded)
     {
-        for (var i = startIndex + 1; i < foldableSection.Count; i++)
+        for (int i = startIndex + 1; i < foldableSection.Count; i++)
         {
             TreeNodeParse currentAstNodeParse = foldableSection[i];
-            var found = (valueIsBlockEnded && currentAstNodeParse.IsCurlyBlockNode()) || currentAstNodeParse.Tok.Kind == TokenKind.Eoln;
+            bool found = (valueIsBlockEnded && currentAstNodeParse.IsCurlyBlockNode()) || currentAstNodeParse.Tok.Kind == TokenKind.Eoln;
             if (found)
             {
                 return i;
@@ -96,8 +96,8 @@ static class ReservedWordsFolder
 
     private static TreeNodeParse FoldReservedWord(List<TreeNodeParse> foldableSection, int index, bool valueIsBlockEnded)
     {
-        var endDeclarationIndex = EndIndexOfDeclaration(foldableSection, index, valueIsBlockEnded);
-        var declarationNode = new TreeNodeParse(AstNodeKind.Declaration)
+        int endDeclarationIndex = EndIndexOfDeclaration(foldableSection, index, valueIsBlockEnded);
+        TreeNodeParse declarationNode = new TreeNodeParse(AstNodeKind.Declaration)
         {
             Tok = foldableSection[index].Tok
         };

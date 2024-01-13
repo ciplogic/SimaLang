@@ -9,9 +9,9 @@ public static class ParserPassOne
     static void FoldParens(List<TreeNodeParse> foldableSection)
     {
         Stack<(int index, int openType)> OpeningTokPos = new Stack<(int index, int openType)>();
-        for (var i = 0; i < foldableSection.Count; i++)
+        for (int i = 0; i < foldableSection.Count; i++)
         {
-            var tok = foldableSection[i].Tok;
+            Token tok = foldableSection[i].Tok;
             int openIndex = tok.IsOpeningToken();
             int closeIndex = tok.IsClosingToken();
             if (openIndex == 0 && closeIndex == 0)
@@ -35,13 +35,13 @@ public static class ParserPassOne
 
     private static int FoldParenRange(List<TreeNodeParse> foldableSection, Token tok, int startIndex, int endIndexInclusive)
     {
-        var foldableTok = new TreeNodeParse(AstNodeKind.Block)
+        TreeNodeParse foldableTok = new TreeNodeParse(AstNodeKind.Block)
         {
             Tok = foldableSection[startIndex].Tok
         };
-        for (var i = startIndex + 1; i < endIndexInclusive; i++)
+        for (int i = startIndex + 1; i < endIndexInclusive; i++)
         {
-            var terminalChild = foldableSection[i];
+            TreeNodeParse terminalChild = foldableSection[i];
             foldableTok.Children.Add(terminalChild);
         }
         foldableSection.RemoveRange(startIndex+1, endIndexInclusive - startIndex);
@@ -51,8 +51,8 @@ public static class ParserPassOne
 
     internal static TreeNodeParse Parse(Slice<Token> tokens)
     {
-        var program = new TreeNodeParse(AstNodeKind.Program);
-        var tokensArr = tokens.Arr;
+        TreeNodeParse program = new TreeNodeParse(AstNodeKind.Program);
+        Token[] tokensArr = tokens.Arr;
         program.Children.AddRange(
             tokensArr.Select(tok =>new TreeNodeParse(AstNodeKind.Terminal)
             {
